@@ -30,7 +30,7 @@ public class ticketcontroller {
         }
         @GetMapping("{showid}")
         public ResponseEntity<List<ticket>> getallbyshowid(@PathVariable("showid") Integer showid){
-            return ticketservice.getallbyshowid(showid);
+            return ticketservice.getallbyshowid(showid + 1);
         }
         //By Ticked ID
         @GetMapping("id/{ticketid}")
