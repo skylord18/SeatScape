@@ -2,6 +2,7 @@ package com.seatscape.seatscape.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -13,23 +14,18 @@ public class ticket {
     private Integer showid;
     private Integer numberofseats;
     private String bookedby;
-
+    @Column(name = "bookedseats")
+    private int[] bookedseats;
     public ticket(){
-
     }
 
-    public ticket(Integer showid, Integer numberofseats, String bookedby) {
+    public ticket(Integer showid, Integer numberofseats, String bookedby, int[] bookedseats) {
         this.showid = showid;
         this.numberofseats = numberofseats;
         this.bookedby = bookedby;
+        this.bookedseats = bookedseats;
     }
 
-    public ticket(Integer ticketid, Integer showid, Integer numberofseats, String bookedby) {
-        this.ticketid = ticketid;
-        this.showid = showid;
-        this.numberofseats = numberofseats;
-        this.bookedby = bookedby;
-    }
 
     @Override
     public String toString() {
@@ -38,6 +34,7 @@ public class ticket {
                 ", showid=" + showid +
                 ", numberofseats=" + numberofseats +
                 ", bookedby='" + bookedby + '\'' +
+                ", bookedseats=" + Arrays.toString(bookedseats) +
                 '}';
     }
 
@@ -71,5 +68,17 @@ public class ticket {
 
     public void setBookedby(String bookedby) {
         this.bookedby = bookedby;
+    }
+
+    public void setTicketid(Integer ticketid) {
+        this.ticketid = ticketid;
+    }
+
+    public int[] getBookedseats() {
+        return bookedseats;
+    }
+
+    public void setBookedseats(int[] bookedseats) {
+        this.bookedseats = bookedseats;
     }
 }

@@ -3,11 +3,11 @@ package com.seatscape.seatscape.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
+
 @Entity
 @Data
 
@@ -20,31 +20,20 @@ public class show {
     @Column(name = "availableseats")
     private Integer avlseats;
     private Timestamp starttime;
+    @Column(name = "bookedtickets")
+    private String bookedtickets;
     public show(){
 
     }
-
-    public show(Integer showid, Integer cinemaid, Integer hallid, Integer movieid, Integer avlseats, Timestamp starttime) {
+    public show(Integer showid, Integer cinemaid, Integer hallid, Integer movieid, Integer avlseats, Timestamp starttime, String bookedtickets) {
         this.showid = showid;
         this.cinemaid = cinemaid;
         this.hallid = hallid;
         this.movieid = movieid;
         this.avlseats = avlseats;
         this.starttime = starttime;
+        this.bookedtickets = bookedtickets;
     }
-
-    @Override
-    public String toString() {
-        return "show{" +
-                "showid=" + showid +
-                ", cinemaid=" + cinemaid +
-                ", hallid=" + hallid +
-                ", movieid=" + movieid +
-                ", avlseats=" + avlseats +
-                ", starttime=" + starttime +
-                '}';
-    }
-
 
     public Integer getShowid() {
         return showid;
@@ -92,5 +81,13 @@ public class show {
 
     public void setStarttime(Timestamp starttime) {
         this.starttime = starttime;
+    }
+
+    public String getBookedtickets() {
+        return bookedtickets;
+    }
+
+    public void setBookedtickets(String bookedtickets) {
+        this.bookedtickets = bookedtickets;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Service
 public class showwrapperservice {
@@ -21,7 +22,8 @@ public class showwrapperservice {
         Integer avlseats = showwrapper.getAvailableseats(), showYear = showwrapper.getStartyear(), showMonth = showwrapper.getStartmonth(), showDate = showwrapper.getStartday();
         Integer startHour   = showwrapper.getStarthour(), startMin = showwrapper.getStartmin();
         Timestamp ts = Timestamp.valueOf(LocalDateTime.of(showYear, showMonth, showDate, startHour,startMin));
-        show s = new show(showid,cinemaid, hallid, movieid, avlseats, ts);
+        String h = showwrapper.getSeats();
+        show s = new show(showid,cinemaid, hallid, movieid, avlseats, ts, h);
         System.out.println("Obj Generated");
         try{
             showDAO.save(s);

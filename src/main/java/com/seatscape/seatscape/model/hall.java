@@ -14,6 +14,7 @@ public class hall {
     private Integer hallid;
     private Integer cinemaid;
     private Integer totalseats;
+    public hall(){}
 
     public hall(Integer hallid, Integer cinemaid, Integer totalseats) {
         this.hallid = hallid;

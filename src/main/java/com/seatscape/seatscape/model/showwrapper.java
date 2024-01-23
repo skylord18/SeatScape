@@ -3,8 +3,8 @@ package com.seatscape.seatscape.model;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
+import java.util.Arrays;
+
 public class showwrapper {
     private Integer showid;
     private Integer cinemaid;
@@ -17,6 +17,21 @@ public class showwrapper {
     private Integer starthour;
     private Integer startmin;
 
+    private String seats;
+
+    public showwrapper(Integer showid, Integer cinemaid, Integer hallid, Integer movieid, Integer availableseats, Integer startyear, Integer startmonth, Integer startday, Integer starthour, Integer startmin, String seats) {
+        this.showid = showid;
+        this.cinemaid = cinemaid;
+        this.hallid = hallid;
+        this.movieid = movieid;
+        this.availableseats = availableseats;
+        this.startyear = startyear;
+        this.startmonth = startmonth;
+        this.startday = startday;
+        this.starthour = starthour;
+        this.startmin = startmin;
+        this.seats = seats;
+    }
 
     @Override
     public String toString() {
@@ -31,6 +46,7 @@ public class showwrapper {
                 ", startday=" + startday +
                 ", starthour=" + starthour +
                 ", startmin=" + startmin +
+                ", seats=" + seats +
                 '}';
     }
 
@@ -112,5 +128,13 @@ public class showwrapper {
 
     public void setStartmin(Integer startmin) {
         this.startmin = startmin;
+    }
+
+    public String getSeats() {
+        return seats;
+    }
+
+    public void setSeats(String seats) {
+        this.seats = seats;
     }
 }
