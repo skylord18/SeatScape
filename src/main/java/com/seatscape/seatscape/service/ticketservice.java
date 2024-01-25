@@ -1,11 +1,7 @@
 package com.seatscape.seatscape.service;
 import com.seatscape.seatscape.dao.showDAO;
 import com.seatscape.seatscape.dao.ticketDAO;
-import com.seatscape.seatscape.exceptions.CountMismatchException;
-import com.seatscape.seatscape.exceptions.HouseFullException;
-import com.seatscape.seatscape.exceptions.InsufficientTicketsException;
-import com.seatscape.seatscape.exceptions.SeatAlreadyBookedException;
-import com.seatscape.seatscape.model.seat;
+import com.seatscape.seatscape.exceptions.*;
 import com.seatscape.seatscape.model.ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +16,9 @@ public class ticketservice {
     ticketDAO ticketDAO;   //-->Create and persist the ticket
     @Autowired
     showDAO showDAO; //-->Enquire the count of available tickets, reduce the count of avlbl tickets
-
-    public ResponseEntity<Optional<ticket>> createTicket(ticket ticket) throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException {
+    Object o = new Object();
+    public ResponseEntity<Optional<ticket>> createTicket(ticket ticket) throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero {
+        if(ticket.getNumberofseats() == 0 )throw new CountOfSeatsZero("The count of tickets is Zero, Plaese add some seats and try again.");
         int avlT = showDAO.getAvailablesetsfromshowid(ticket.getShowid());
         if(avlT == 0)throw new HouseFullException("The Show is housefull, Try with another show.");
         if(avlT < ticket.getNumberofseats())throw new InsufficientTicketsException("Only " + avlT  + " tickets are available, Try with fewer number of seats.");
@@ -37,17 +34,13 @@ public class ticketservice {
             sb.setCharAt(2* seatid, '1');
         }
         System.out.println(sb.toString());
-//        for(Integer seatid : ticket.getBookedseats()){
-//            if(bookedseats[0]!=0)throw new SeatAlreadyBookedException("The seat you re trying to book is already booked. Please check with another seats.");
-//        }
-//        for(Integer seatid : ticket.getBookedseats()){
-//            bookedseats[seatid] = 1;
-//        }
         try{
-            showDAO.reduceseatsbycount(ticket.getShowid(), avlT - ticket.getNumberofseats());
-            showDAO.setbookedseats(sb.toString(), ticket.getShowid());
-            ticketDAO.save(ticket);
-           return new ResponseEntity<>(Optional.of(ticket), HttpStatus.OK);
+            synchronized (o){
+                showDAO.reduceseatsbycount(ticket.getShowid(), avlT - ticket.getNumberofseats());
+                showDAO.setbookedseats(sb.toString(), ticket.getShowid());
+                ticketDAO.save(ticket);
+                return new ResponseEntity<>(Optional.of(ticket), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -56,7 +49,9 @@ public class ticketservice {
 
     public ResponseEntity<List<ticket>> getallbyshowid(Integer showid) {
         try{
-            return new ResponseEntity<>(ticketDAO.getallbyshowid(showid), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(ticketDAO.getallbyshowid(showid), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -65,7 +60,9 @@ public class ticketservice {
 
     public ResponseEntity<Optional<ticket>> getticketbyticketid(Integer ticketid) {
         try{
-            return new ResponseEntity<>(Optional.of(ticketDAO.getticketbyticketid(ticketid)), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(Optional.of(ticketDAO.getticketbyticketid(ticketid)), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -74,7 +71,9 @@ public class ticketservice {
 
     public ResponseEntity<List<ticket>> getticketsbyusername(String username) {
         try{
-            return new ResponseEntity<>(ticketDAO.getticketsbyusername(username), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(ticketDAO.getticketsbyusername(username), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -83,7 +82,9 @@ public class ticketservice {
 
     public ResponseEntity<List<ticket>> getalltickets() {
         try{
-            return new ResponseEntity<>(ticketDAO.findAll(), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(ticketDAO.findAll(), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
