@@ -12,10 +12,13 @@ import java.util.Optional;
 public class movieservice {
     @Autowired
     movieDAO movieDAO;
+    Object o = new Object();
     public ResponseEntity<List<movie>> getAllMovies() {
         try{
-           List<movie> movieList = movieDAO.findAll();
-           return new ResponseEntity<>(movieList, HttpStatus.OK);
+            synchronized (o){
+                List<movie> movieList = movieDAO.findAll();
+                return new ResponseEntity<>(movieList, HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -23,8 +26,10 @@ public class movieservice {
     }
     public ResponseEntity<Optional<movie>> findbyid(Integer id) {
         try{
-             Optional<movie> m = movieDAO.findById(id);
-             return new ResponseEntity<>(m, HttpStatus.OK);
+             synchronized (o){
+                 Optional<movie> m = movieDAO.findById(id);
+                 return new ResponseEntity<>(m, HttpStatus.OK);
+             }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -33,8 +38,10 @@ public class movieservice {
     }
     public ResponseEntity<List<movie>> getMoviesgreaterthan(Integer duration) {
         try{
-           List<movie> movieList = movieDAO.findmoviesgreaterthan(duration);
-            return new ResponseEntity<>(movieList, HttpStatus.OK);
+           synchronized (o){
+               List<movie> movieList = movieDAO.findmoviesgreaterthan(duration);
+               return new ResponseEntity<>(movieList, HttpStatus.OK);
+           }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -42,8 +49,10 @@ public class movieservice {
     }
     public ResponseEntity<List<movie>> getmovieslesserthan(Integer duration) {
         try {
-            List<movie> movieList = movieDAO.getmovieslesserthan(duration);
-            return new ResponseEntity<>(movieList, HttpStatus.OK);
+            synchronized (o){
+                List<movie> movieList = movieDAO.getmovieslesserthan(duration);
+                return new ResponseEntity<>(movieList, HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -51,8 +60,10 @@ public class movieservice {
     }
     public ResponseEntity<List<movie>> getmoviesbylanguage(String lang) {
         try{
-            List<movie> movieList = movieDAO.getmoviesbylanguage(lang);
-            return new ResponseEntity<>(movieList, HttpStatus.OK);
+            synchronized (o){
+                List<movie> movieList = movieDAO.getmoviesbylanguage(lang);
+                return new ResponseEntity<>(movieList, HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -60,8 +71,10 @@ public class movieservice {
     }
     public ResponseEntity<List<movie>> getmoviesbygenre(String genre) {
         try{
-            List<movie> movieList = movieDAO.getmoviesbygenre(genre);
-            return new ResponseEntity<>(movieList, HttpStatus.OK);
+            synchronized (o){
+                List<movie> movieList = movieDAO.getmoviesbygenre(genre);
+                return new ResponseEntity<>(movieList, HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -69,8 +82,10 @@ public class movieservice {
     }
     public ResponseEntity<List<movie>> findByTitleContaining(String keyword) {
         try{
-            List<movie> movieList = movieDAO.findByTitleContaining(keyword);
-            return new ResponseEntity<>(movieList, HttpStatus.OK);
+            synchronized (o){
+                List<movie> movieList = movieDAO.findByTitleContaining(keyword);
+                return new ResponseEntity<>(movieList, HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -78,8 +93,10 @@ public class movieservice {
     }
     public ResponseEntity<String> deletebyid(Integer id) {
         try{
-            movieDAO.deleteById(id);
-            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            synchronized (o){
+                movieDAO.deleteById(id);
+                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -17,9 +17,12 @@ public class hallservice {
     cinemaservice cinemaservice;
     @Autowired
     hallDAO hallDAO;
+    Object o = new Object();
     public ResponseEntity<List<hall>> getallHalls() {
         try{
-            return new ResponseEntity<>(hallDAO.findAll(), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(hallDAO.findAll(), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -35,8 +38,10 @@ public class hallservice {
                 listHalls.add(new hall(10 * cinemaid + i , cinemaid, 99));
             }
             try{
-                hallDAO.saveAll(listHalls);
-                return new ResponseEntity<>("Success", HttpStatus.CREATED);
+                synchronized (o){
+                    hallDAO.saveAll(listHalls);
+                    return new ResponseEntity<>("Success", HttpStatus.CREATED);
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -47,7 +52,9 @@ public class hallservice {
 
     public ResponseEntity<List<hall>> gethallsbycinemaid(Integer cinemaid) {
         try{
-            return new ResponseEntity<>(hallDAO.findAllBycinemaid(cinemaid), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(hallDAO.findAllBycinemaid(cinemaid), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

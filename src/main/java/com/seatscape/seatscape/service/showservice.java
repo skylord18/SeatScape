@@ -14,10 +14,12 @@ import java.util.Optional;
 public class showservice {
     @Autowired
     showDAO showDAO;
-
+    Object o  = new Object();
     public ResponseEntity<List<show>> getallshows() {
        try{
-           return new ResponseEntity<>(showDAO.findAll(), HttpStatus.OK);
+           synchronized (o){
+               return new ResponseEntity<>(showDAO.findAll(), HttpStatus.OK);
+           }
        }catch (Exception e){
            e.printStackTrace();
        }
@@ -26,11 +28,13 @@ public class showservice {
 
     public ResponseEntity<Optional<show>> getshowbyid(Integer id) {
         try {
-            Optional<show> optionalShow = showDAO.findById(id);
-            if (optionalShow.isPresent()) {
-                return new ResponseEntity<>(optionalShow, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            synchronized (o){
+                Optional<show> optionalShow = showDAO.findById(id);
+                if (optionalShow.isPresent()) {
+                    return new ResponseEntity<>(optionalShow, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,11 +43,13 @@ public class showservice {
     }
     public ResponseEntity<List<show>> getbycinemaid(Integer cinemaid) {
         try{
-            List<show>tempList = showDAO.findBycinemaid(cinemaid);
-            if(!tempList.isEmpty()){
-                return new ResponseEntity<>(tempList, HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+            synchronized (o){
+                List<show>tempList = showDAO.findBycinemaid(cinemaid);
+                if(!tempList.isEmpty()){
+                    return new ResponseEntity<>(tempList, HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -53,11 +59,13 @@ public class showservice {
     }
     public ResponseEntity<List<show>> getbymovieid(Integer movieid) {
         try{
-            List<show> tempList = showDAO.getbymovieid(movieid);
-            if(!tempList.isEmpty()){
-                return new ResponseEntity<>(tempList, HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+            synchronized (o){
+                List<show> tempList = showDAO.getbymovieid(movieid);
+                if(!tempList.isEmpty()){
+                    return new ResponseEntity<>(tempList, HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -67,11 +75,13 @@ public class showservice {
 
     public ResponseEntity<List<show>> getfutureshowsbycinemaid(Integer cinemaid) {
         try{
-            List<show> tempList = showDAO.getfutureshowsbycinemaid(Timestamp.valueOf(LocalDateTime.now()), cinemaid);
-            if(!tempList.isEmpty()){
-                return new ResponseEntity<>(tempList, HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+            synchronized (o){
+                List<show> tempList = showDAO.getfutureshowsbycinemaid(Timestamp.valueOf(LocalDateTime.now()), cinemaid);
+                if(!tempList.isEmpty()){
+                    return new ResponseEntity<>(tempList, HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -81,11 +91,13 @@ public class showservice {
 
     public ResponseEntity<List<show>> getfutureshows() {
         try{
-            List<show> tempList = showDAO.getfutureshows(Timestamp.valueOf(LocalDateTime.now()));
-            if(!tempList.isEmpty()){
-                return new ResponseEntity<>(tempList, HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+            synchronized (o){
+                List<show> tempList = showDAO.getfutureshows(Timestamp.valueOf(LocalDateTime.now()));
+                if(!tempList.isEmpty()){
+                    return new ResponseEntity<>(tempList, HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -95,11 +107,13 @@ public class showservice {
 
     public ResponseEntity<List<show>> getfutureshowsbymovieid(Integer movieid) {
         try{
-            List<show> tempList = showDAO.getfutureshowsbymovieid(Timestamp.valueOf(LocalDateTime.now()), movieid);
-            if(!tempList.isEmpty()){
-                return new ResponseEntity<>(tempList, HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+            synchronized (o){
+                List<show> tempList = showDAO.getfutureshowsbymovieid(Timestamp.valueOf(LocalDateTime.now()), movieid);
+                if(!tempList.isEmpty()){
+                    return new ResponseEntity<>(tempList, HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -109,7 +123,9 @@ public class showservice {
 
     public ResponseEntity<List<show>> getshowsbycityname(String cityname) {
         try{
-            return new ResponseEntity<>(showDAO.getShowsByCityName(cityname), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(showDAO.getShowsByCityName(cityname), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
@@ -118,7 +134,9 @@ public class showservice {
 
     public ResponseEntity<List<show>> getShowsByCityAndMovieName(String cityname, String moviename) {
         try{
-            return new ResponseEntity<>(showDAO.getShowsByCityAndMovieName(cityname, moviename), HttpStatus.OK);
+          synchronized (o){
+              return new ResponseEntity<>(showDAO.getShowsByCityAndMovieName(cityname, moviename), HttpStatus.OK);
+          }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);

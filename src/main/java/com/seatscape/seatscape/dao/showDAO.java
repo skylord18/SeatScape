@@ -1,6 +1,6 @@
 package com.seatscape.seatscape.dao;
 
-import com.seatscape.seatscape.model.seat;
+
 import com.seatscape.seatscape.model.show;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

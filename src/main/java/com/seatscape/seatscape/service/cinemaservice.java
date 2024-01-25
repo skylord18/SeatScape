@@ -15,10 +15,12 @@ import java.util.Optional;
 public class cinemaservice {
     @Autowired
     cinemaDAO cinemaDAO;
-
+    Object o = new Object();
     public ResponseEntity<List<cinema>> getAll() {
         try{
-            return new ResponseEntity<>(cinemaDAO.findAll(), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(cinemaDAO.findAll(), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -27,7 +29,9 @@ public class cinemaservice {
 
     public ResponseEntity<List<cinema>> getcinemasbycity(String cityname) {
         try{
-            return new ResponseEntity<>(cinemaDAO.findbycity(cityname), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(cinemaDAO.findbycity(cityname), HttpStatus.OK);
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -36,7 +40,9 @@ public class cinemaservice {
 
     public ResponseEntity<List<cinema>> getcinemasbystate(String statename) {
         try{
-            return new ResponseEntity<>(cinemaDAO.findbystate(statename), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(cinemaDAO.findbystate(statename), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -45,7 +51,9 @@ public class cinemaservice {
 
     public ResponseEntity<List<cinema>> getbystatecity(String statename, String cityname) {
         try{
-            return new ResponseEntity<>(cinemaDAO.getbystatecity(statename, cityname), HttpStatus.OK);
+            synchronized (o){
+                return new ResponseEntity<>(cinemaDAO.getbystatecity(statename, cityname), HttpStatus.OK);
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -54,11 +62,13 @@ public class cinemaservice {
 
     public ResponseEntity<Optional<cinema>> getbyid(Integer id) {
         try {
-            Optional<cinema> op = cinemaDAO.findById(id);
-            if (op.isPresent()) {
-                return new ResponseEntity<>(op, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(op, HttpStatus.NOT_FOUND);
+            synchronized (o){
+                Optional<cinema> op = cinemaDAO.findById(id);
+                if (op.isPresent()) {
+                    return new ResponseEntity<>(op, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(op, HttpStatus.NOT_FOUND);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

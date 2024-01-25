@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class showwrapperservice {
     @Autowired
     showDAO showDAO;
-
+    Object o = new Object();
     public ResponseEntity<String> addtoDB(showwrapper showwrapper) {
         Integer showid = showwrapper.getShowid(), hallid = showwrapper.getHallid(), cinemaid = showwrapper.getCinemaid(), movieid = showwrapper.getMovieid();
         Integer avlseats = showwrapper.getAvailableseats(), showYear = showwrapper.getStartyear(), showMonth = showwrapper.getStartmonth(), showDate = showwrapper.getStartday();
@@ -26,9 +26,11 @@ public class showwrapperservice {
         show s = new show(showid,cinemaid, hallid, movieid, avlseats, ts, h);
         System.out.println("Obj Generated");
         try{
-            showDAO.save(s);
-            System.out.println("Obj SAVED");
-            return new ResponseEntity<>("Success", HttpStatus.OK);
+            synchronized (o){
+                showDAO.save(s);
+                System.out.println("Obj SAVED");
+                return new ResponseEntity<>("Success", HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>("CANNOT SAVE", HttpStatus.INTERNAL_SERVER_ERROR);
