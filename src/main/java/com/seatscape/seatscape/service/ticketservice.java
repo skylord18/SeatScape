@@ -90,7 +90,6 @@ public class ticketservice {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
     public ResponseEntity<String> cancelTicket(Integer id) throws TicketDoesNotExistException, SeatsareInconsistentStateException {
         Optional<ticket> ticket = ticketDAO.findById(id);
         if(ticket.isPresent()){
@@ -120,4 +119,118 @@ public class ticketservice {
             throw new TicketDoesNotExistException("The Ticket that you're cancelling does not exist, please try with a valid ticket ID.");
         }
     }
+//
+//    public ResponseEntity<String> partialcanellation(ticket ticket) throws InvalidTicketException {
+//        int ticketID = ticket.getTicketid();
+//        Optional<ticket> tfromDB = ticketDAO.findById(ticketID);
+//        if(tfromDB.isPresent()){
+//            if(ticket.getNumberofseats()<tfromDB.get().getNumberofseats()){
+//                int [] seatstocancel = ticket.getBookedseats();
+//                StringBuilder sb = new StringBuilder(showDAO.getBookedSeatsbyshowid(ticket.getShowid()));
+//                int [] bookedseats = tfromDB.get().getBookedseats();
+//                Arrays.sort(bookedseats);
+//                ArrayList<Integer> listInvalid = new ArrayList<>();
+//                for(int seat : seatstocancel){
+//                    if(Arrays.binarySearch(bookedseats, seat)==-1){
+//                        listInvalid.add(seat);
+//                    }
+//                }
+//                if(listInvalid.isEmpty()){
+//                    for(int seat : seatstocancel){
+//                        sb.setCharAt(2 * seat,'0');
+//                    }
+//                    Arrays.sort(seatstocancel);
+//                    ArrayList<Integer> resSeats = new ArrayList<>();
+//                    int cntT = 0;
+//                    for(int seat : bookedseats){
+//                        if(Arrays.binarySearch(seatstocancel, seat)==-1){
+//                            resSeats.add(seat);
+//                        }else cntT++;
+//                    }
+//                    int [] resultseats = new int[resSeats.size()];
+//                    int i = 0;
+//                    for(int k = 0;k<resSeats.size();k++){
+//                        resultseats[i] = resSeats.get(k);
+//                    }
+//                    int remSeats  = tfromDB.get().getNumberofseats() - ticket.getNumberofseats();
+//                    showDAO.updateseats(tfromDB.get().getShowid(), tfromDB.get().getNumberofseats() + ticket.getNumberofseats());
+//                    showDAO.setbookedseats(sb.toString(), tfromDB.get().getShowid());
+//                    ticketDAO.updateBookedseats(resultseats, ticketID);
+//                    ticketDAO.setticketcount(remSeats, ticketID);
+//                    return new ResponseEntity<>("SUCCESFULLY CANCELLED", HttpStatus.OK);
+//                }else{
+//                    return new ResponseEntity<>("The Seats"+listInvalid.toString()+ "is not booked by You, Please don't be Extra Smart.", HttpStatus.BAD_REQUEST);
+//                }
+//            }else if (ticket.getNumberofseats()==tfromDB.get().getNumberofseats()){
+//                return new ResponseEntity<>("Since The Number of Supplied Tickets is Same as the Number of Seats Reserved, Please go through Complete Cancellation", HttpStatus.BAD_REQUEST);
+//            }else{
+//                return new ResponseEntity<>("The Number of Seats Cancelling Exceeds the number of Booked Seats", HttpStatus.BAD_REQUEST);
+//            }
+//        }else{
+//            throw new InvalidTicketException("The Ticket You're Trying to Cancel is Invalid.");
+//        }
+//    }
+    public ResponseEntity<String> partialCancellation(ticket ticket) throws InvalidTicketException {
+        int ticketID = ticket.getTicketid();
+        Optional<ticket> optionalTicketFromDB = ticketDAO.findById(ticketID);
+        if (optionalTicketFromDB.isPresent()) {
+            ticket ticketFromDB = optionalTicketFromDB.get();
+            int requestedSeats = ticket.getNumberofseats();
+            if (requestedSeats < ticketFromDB.getNumberofseats()) {
+                int[] seatsToCancel = ticket.getBookedseats();
+                String bookedSeatsString = showDAO.getBookedSeatsbyshowid(ticket.getShowid());
+                int[] bookedSeats = ticketFromDB.getBookedseats();
+                Arrays.sort(bookedSeats);
+                List<Integer> invalidSeats = new ArrayList<>();
+                StringBuilder sb = new StringBuilder(bookedSeatsString);
+                for (int seat : seatsToCancel) {
+                    if (Arrays.binarySearch(bookedSeats, seat) == -1) {
+                        invalidSeats.add(seat);
+                    } else {
+                        sb.setCharAt(2 * seat, '0');
+                    }
+                }
+                if (invalidSeats.isEmpty()) {
+                    Arrays.sort(seatsToCancel);
+                    List<Integer> remainingSeats = new ArrayList<>();
+                    for (int seat : bookedSeats) {
+                        if (Arrays.binarySearch(seatsToCancel, seat) == -1) {
+                            remainingSeats.add(seat);
+                        }
+                    }
+                    int[] resultSeats = remainingSeats.stream().mapToInt(Integer::intValue).toArray();
+                    int remainingSeatCount = ticketFromDB.getNumberofseats() - requestedSeats;
+                   try{
+                       synchronized (o){
+                           showDAO.updateseats(ticketFromDB.getShowid(), showDAO.getAvailablesetsfromshowid(ticket.getShowid()) + requestedSeats);
+                           showDAO.setbookedseats(sb.toString(), ticketFromDB.getShowid());
+                           ticketDAO.updateBookedseats(resultSeats, ticketFromDB.getTicketid());
+                           ticketDAO.setticketcount(remainingSeatCount, ticketFromDB.getTicketid());
+                       }
+                       return new ResponseEntity<>("SUCCESSFULLY CANCELLED", HttpStatus.OK);
+                   }catch (Exception e){
+                       e.printStackTrace();
+                       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                   }
+                } else {
+                    return new ResponseEntity<>(
+                            "The Seats " + invalidSeats.toString() + " are not booked by You. Please don't be Extra Smart.",
+                            HttpStatus.BAD_REQUEST);
+                }
+            } else if (requestedSeats == ticketFromDB.getNumberofseats()) {
+                return new ResponseEntity<>(
+                        "Since the number of supplied tickets is the same as the number of seats reserved, please go through complete cancellation.",
+                        HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>("The number of seats cancelling exceeds the number of booked seats.",
+                        HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            throw new InvalidTicketException("The ticket you're trying to cancel is invalid.");
+        }
+    }
+
+
+
+
 }

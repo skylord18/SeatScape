@@ -18,7 +18,7 @@ public class ticketcontroller {
     ticketservice ticketservice;
     //Create
         @PutMapping("create")
-        public ResponseEntity<Optional<ticket>> createticket(@RequestBody ticket ticket) throws Exception{
+        public ResponseEntity<Optional<ticket>> createticket(@RequestBody ticket ticket)throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero{
            return ticketservice.createTicket(ticket);
         }
     //Read
@@ -46,5 +46,9 @@ public class ticketcontroller {
         @DeleteMapping("cancel/{id}")
         public ResponseEntity<String> cancelTicket(@PathVariable("id") Integer id) throws TicketDoesNotExistException, SeatsareInconsistentStateException {
             return ticketservice.cancelTicket(id);
+        }
+        @DeleteMapping("cancel/partial")
+        public ResponseEntity<String> cancelPartial(@RequestBody ticket ticket) throws InvalidTicketException {
+            return ticketservice.partialCancellation(ticket);
         }
 }

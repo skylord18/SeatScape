@@ -1,6 +1,4 @@
 package com.seatscape.seatscape.dao;
-
-
 import com.seatscape.seatscape.model.show;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,8 +40,6 @@ public interface showDAO extends JpaRepository<show, Integer> {
 
     @Query(value = "SELECT bookedtickets FROM show s WHERE s.showid = :showid", nativeQuery = true)
     String getBookedSeatsbyshowid(@Param("showid") Integer showid);
-
-
     @Modifying
     @Query(value = "UPDATE show SET bookedtickets = :bookedseats WHERE show.showid = :showid", nativeQuery = true)
     void setbookedseats(@Param("bookedseats") String bookedseats, @Param("showid") Integer showid);
