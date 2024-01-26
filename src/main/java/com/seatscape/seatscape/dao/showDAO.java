@@ -38,7 +38,7 @@ public interface showDAO extends JpaRepository<show, Integer> {
     Integer getAvailablesetsfromshowid(@Param("showid") Integer showid);
     @Modifying
     @Query(value = "UPDATE show  SET availableseats = :finalvalue WHERE showid = :showid", nativeQuery = true)
-    void reduceseatsbycount(@Param("showid") Integer showid, @Param("finalvalue") Integer finalvalue);
+    void updateseats(@Param("showid") Integer showid, @Param("finalvalue") Integer finalvalue);
 
     @Query(value = "SELECT bookedtickets FROM show s WHERE s.showid = :showid", nativeQuery = true)
     String getBookedSeatsbyshowid(@Param("showid") Integer showid);

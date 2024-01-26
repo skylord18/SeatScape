@@ -16,7 +16,7 @@ public class ticketservice {
     ticketDAO ticketDAO;   //-->Create and persist the ticket
     @Autowired
     showDAO showDAO; //-->Enquire the count of available tickets, reduce the count of avlbl tickets
-    Object o = new Object();
+    final Object o = new Object();
     public ResponseEntity<Optional<ticket>> createTicket(ticket ticket) throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero {
         if(ticket.getNumberofseats() == 0 )throw new CountOfSeatsZero("The count of tickets is Zero, Plaese add some seats and try again.");
         int avlT = showDAO.getAvailablesetsfromshowid(ticket.getShowid());
@@ -36,7 +36,7 @@ public class ticketservice {
         System.out.println(sb.toString());
         try{
             synchronized (o){
-                showDAO.reduceseatsbycount(ticket.getShowid(), avlT - ticket.getNumberofseats());
+                showDAO.updateseats(ticket.getShowid(), avlT - ticket.getNumberofseats());
                 showDAO.setbookedseats(sb.toString(), ticket.getShowid());
                 ticketDAO.save(ticket);
                 return new ResponseEntity<>(Optional.of(ticket), HttpStatus.OK);
@@ -88,6 +88,36 @@ public class ticketservice {
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<String> cancelTicket(Integer id) throws TicketDoesNotExistException, SeatsareInconsistentStateException {
+        Optional<ticket> ticket = ticketDAO.findById(id);
+        if(ticket.isPresent()){
+            int showid = ticket.get().getShowid(), numSeats = ticket.get().getNumberofseats(), showID = ticket.get().getShowid(), currFreeSeats = showDAO.getAvailablesetsfromshowid(showid);
+            int[] seatstoFree = ticket.get().getBookedseats();
+            String seatsbooked = showDAO.getBookedSeatsbyshowid(showID);
+            StringBuilder sb = new StringBuilder(seatsbooked);
+            for(int bookedseat : seatstoFree){
+                if(sb.charAt(2 * bookedseat) != '1'){
+                    throw new SeatsareInconsistentStateException("The Seats are in Inconsistent State, Requires Immediate Attention.");
+                }else{
+                    sb.setCharAt(2 * bookedseat, '0');
+                }
+            }
+            try{
+                synchronized (o){
+                    ticketDAO.deleteById(id);
+                    showDAO.updateseats(showid, currFreeSeats + numSeats);
+                    showDAO.setbookedseats(sb.toString(), showid);
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
+            }
+        }else{
+            throw new TicketDoesNotExistException("The Ticket that you're cancelling does not exist, please try with a valid ticket ID.");
         }
     }
 }

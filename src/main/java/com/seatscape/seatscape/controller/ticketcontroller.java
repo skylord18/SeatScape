@@ -4,7 +4,6 @@ import com.seatscape.seatscape.exceptions.*;
 
 import com.seatscape.seatscape.model.ticket;
 import com.seatscape.seatscape.service.ticketservice;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +42,9 @@ public class ticketcontroller {
         public ResponseEntity<List<ticket>> getticketsbyusername(@PathVariable("username") String username){
             return ticketservice.getticketsbyusername(username);
         }
-
+    // Cancel
+        @DeleteMapping("cancel/{id}")
+        public ResponseEntity<String> cancelTicket(@PathVariable("id") Integer id) throws TicketDoesNotExistException, SeatsareInconsistentStateException {
+            return ticketservice.cancelTicket(id);
+        }
 }
