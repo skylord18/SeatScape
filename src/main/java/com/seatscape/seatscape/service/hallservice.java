@@ -29,7 +29,7 @@ public class hallservice {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<String> createHalls(Integer cinemaid) {
+    public ResponseEntity<List<hall>> createHalls(Integer cinemaid) {
         ResponseEntity<Optional<cinema>> c = cinemaservice.getbyid(cinemaid);
         if(c.getBody().isPresent()){
             Integer totalHalls = c.getBody().get().getTotalhalls();
@@ -40,14 +40,14 @@ public class hallservice {
             try{
                 synchronized (o){
                     hallDAO.saveAll(listHalls);
-                    return new ResponseEntity<>("Success", HttpStatus.CREATED);
+                    return new ResponseEntity<>(listHalls, HttpStatus.CREATED);
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return new ResponseEntity<>("List Created but cannot save", HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<>( HttpStatus.I_AM_A_TEAPOT);
         }
-        return new ResponseEntity<>("Cinema ID not Present", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<List<hall>> gethallsbycinemaid(Integer cinemaid) {

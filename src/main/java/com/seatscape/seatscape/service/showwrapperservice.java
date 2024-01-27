@@ -18,12 +18,12 @@ public class showwrapperservice {
     showDAO showDAO;
     Object o = new Object();
     public ResponseEntity<String> addtoDB(showwrapper showwrapper) {
-        Integer showid = showwrapper.getShowid(), hallid = showwrapper.getHallid(), cinemaid = showwrapper.getCinemaid(), movieid = showwrapper.getMovieid();
+        Integer hallid = showwrapper.getHallid(), cinemaid = showwrapper.getCinemaid(), movieid = showwrapper.getMovieid();
         Integer avlseats = showwrapper.getAvailableseats(), showYear = showwrapper.getStartyear(), showMonth = showwrapper.getStartmonth(), showDate = showwrapper.getStartday();
         Integer startHour   = showwrapper.getStarthour(), startMin = showwrapper.getStartmin();
         Timestamp ts = Timestamp.valueOf(LocalDateTime.of(showYear, showMonth, showDate, startHour,startMin));
         String h = showwrapper.getSeats();
-        show s = new show(showid,cinemaid, hallid, movieid, avlseats, ts, h);
+        show s = new show(cinemaid, hallid, movieid, avlseats, ts);
         System.out.println("Obj Generated");
         try{
             synchronized (o){

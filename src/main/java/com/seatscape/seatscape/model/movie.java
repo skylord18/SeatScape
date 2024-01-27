@@ -19,8 +19,6 @@ public class movie {
     private String lang;
     private LocalDate releasedate;
     private String genre;
-
-
     @Override
     public String toString() {
         return "movie{" +

@@ -1,8 +1,6 @@
 package com.seatscape.seatscape.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -13,6 +11,7 @@ import java.util.List;
 
 public class show {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer showid;
     private Integer cinemaid;
     private Integer hallid;
@@ -25,14 +24,12 @@ public class show {
     public show(){
 
     }
-    public show(Integer showid, Integer cinemaid, Integer hallid, Integer movieid, Integer avlseats, Timestamp starttime, String bookedtickets) {
-        this.showid = showid;
+    public show(Integer cinemaid, Integer hallid, Integer movieid, Integer avlseats, Timestamp starttime) {
         this.cinemaid = cinemaid;
         this.hallid = hallid;
         this.movieid = movieid;
         this.avlseats = avlseats;
         this.starttime = starttime;
-        this.bookedtickets = bookedtickets;
     }
 
     public Integer getShowid() {

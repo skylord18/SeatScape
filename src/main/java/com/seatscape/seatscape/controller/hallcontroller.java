@@ -13,13 +13,12 @@ import java.util.List;
 public class hallcontroller {
     @Autowired
     hallservice hallservice;
-
     @GetMapping("getall")
     public ResponseEntity<List<hall>> getallHalls(){
         return hallservice.getallHalls();
     }
     @PutMapping("create/{cinemaid}")
-    public ResponseEntity<String> createHalls(@PathVariable("cinemaid") Integer cinemaid){
+    public ResponseEntity<List<hall>> createHalls(@PathVariable("cinemaid") Integer cinemaid){
         return hallservice.createHalls(cinemaid);
     }
     @GetMapping("get/{cinemaid}")
