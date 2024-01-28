@@ -48,4 +48,10 @@ public class moviecontroller {
     public ResponseEntity<String> deletebyid(@PathVariable("id") Integer id){
         return movieservice.deletebyid(id);
     }
+    @PostMapping("put")
+    public ResponseEntity<String>putmovie(@RequestBody movie m){
+        return movieservice.putmovie(m);
+    }
+
+
 }

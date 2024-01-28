@@ -102,4 +102,16 @@ public class movieservice {
         }
         return new ResponseEntity<>("FAILURE", HttpStatus.BAD_REQUEST);
     }
+
+    public ResponseEntity<String> putmovie(movie m) {
+        try{
+            synchronized (o){
+                movieDAO.save(m);
+                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

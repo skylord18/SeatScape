@@ -18,7 +18,7 @@ public class ticketcontroller {
     ticketservice ticketservice;
     //Create
         @PutMapping("create")
-        public ResponseEntity<Optional<ticket>> createticket(@RequestBody ticket ticket)throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero{
+        public ResponseEntity<Optional<ticket>> createticket(@RequestBody ticket ticket) throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero, TooManySeatsException {
            return ticketservice.createTicket(ticket);
         }
     //Read

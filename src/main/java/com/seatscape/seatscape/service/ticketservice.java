@@ -19,8 +19,9 @@ public class ticketservice {
     @Autowired
     showDAO showDAO; //-->Enquire the count of available tickets, reduce the count of avlbl tickets
     final Object o = new Object();
-    public ResponseEntity<Optional<ticket>> createTicket(ticket ticket) throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero {
+    public ResponseEntity<Optional<ticket>> createTicket(ticket ticket) throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero, TooManySeatsException {
         if(ticket.getNumberofseats() == 0 )throw new CountOfSeatsZero("The count of tickets is Zero, Plaese add some seats and try again.");
+        if(ticket.getNumberofseats()>9)throw new TooManySeatsException("The Number of seats are too much, Select fewer Seats");
         int avlT = showDAO.getAvailablesetsfromshowid(ticket.getShowid());
         if(avlT == 0)throw new HouseFullException("The Show is housefull, Try with another show.");
         if(avlT < ticket.getNumberofseats())throw new InsufficientTicketsException("Only " + avlT  + " tickets are available, Try with fewer number of seats.");
