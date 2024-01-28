@@ -233,4 +233,19 @@ public class ticketservice {
     }
 
 
+
+    public ResponseEntity<List<Integer>> avlseatsforshowid(Integer showid) {
+        StringBuilder sb = new StringBuilder(showDAO.getBookedSeatsbyshowid(showid));
+        List<Integer> ls = new ArrayList<>();
+        System.out.println(sb.toString());
+        for(int i = 1;i<=99;i++){
+            if(sb.charAt(i*2)=='0')ls.add(i);
+        }
+        try{
+            return new ResponseEntity<>(ls, HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

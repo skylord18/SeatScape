@@ -51,4 +51,8 @@ public class ticketcontroller {
         public ResponseEntity<String> cancelPartial(@RequestBody ticket ticket) throws InvalidTicketException {
             return ticketservice.partialCancellation(ticket);
         }
+        @GetMapping("show/{showid}")
+        public ResponseEntity<List<Integer>> avlseatsforshowid(@PathVariable("showid") Integer showid){
+            return ticketservice.avlseatsforshowid(showid);
+        }
 }
