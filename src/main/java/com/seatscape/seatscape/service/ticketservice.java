@@ -225,15 +225,12 @@ public class ticketservice {
                         HttpStatus.BAD_REQUEST);
             } else {
                 return new ResponseEntity<>("The number of seats cancelling exceeds the number of booked seats.",
-                        HttpStatus.BAD_REQUEST);
+                         HttpStatus.BAD_REQUEST);
             }
         } else {
             throw new InvalidTicketException("The ticket you're trying to cancel is invalid.");
         }
     }
-
-
-
     public ResponseEntity<List<Integer>> avlseatsforshowid(Integer showid) {
         StringBuilder sb = new StringBuilder(showDAO.getBookedSeatsbyshowid(showid));
         List<Integer> ls = new ArrayList<>();
