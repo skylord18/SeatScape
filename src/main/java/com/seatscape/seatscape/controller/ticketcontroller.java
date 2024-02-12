@@ -16,33 +16,26 @@ import java.util.Optional;
 public class ticketcontroller {
     @Autowired
     ticketservice ticketservice;
-    //Create
         @PutMapping("create")
         public ResponseEntity<Optional<ticket>> createticket(@RequestBody ticket ticket) throws HouseFullException, InsufficientTicketsException, SeatAlreadyBookedException, CountMismatchException, CountOfSeatsZero, TooManySeatsException {
            return ticketservice.createTicket(ticket);
         }
-    //Read
-        //By Show-->
         @GetMapping("getall")
         public ResponseEntity<List<ticket>> getalltickets(){
             return ticketservice.getalltickets();
         }
-        @GetMapping("{showid}")
+        @GetMapping("showid/{showid}")
         public ResponseEntity<List<ticket>> getallbyshowid(@PathVariable("showid") Integer showid){
             return ticketservice.getallbyshowid(showid );
         }
-        //By Ticked ID
         @GetMapping("id/{ticketid}")
         public ResponseEntity<Optional<ticket>> getticketbyticketid(@PathVariable("ticketid") Integer ticketid){
             return ticketservice.getticketbyticketid(ticketid);
         }
-
-        //Using Booked By
         @GetMapping("user/{username}")
         public ResponseEntity<List<ticket>> getticketsbyusername(@PathVariable("username") String username){
             return ticketservice.getticketsbyusername(username);
         }
-    // Cancel
         @DeleteMapping("cancel/{id}")
         public ResponseEntity<String> cancelTicket(@PathVariable("id") Integer id) throws TicketDoesNotExistException, SeatsareInconsistentStateException {
             return ticketservice.cancelTicket(id);

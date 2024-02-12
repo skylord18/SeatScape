@@ -25,5 +25,4 @@ public class hallcontroller {
     public ResponseEntity<List<hall>> gethallsbycinemaid(@PathVariable("cinemaid") Integer cinemaid){
         return hallservice.gethallsbycinemaid(cinemaid);
     }
-
 }

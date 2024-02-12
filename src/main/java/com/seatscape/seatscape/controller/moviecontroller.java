@@ -8,6 +8,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+//        {
+//          "movieid": 83,
+//          "title": "MySQL Internals",
+//          "description": "An In-Depth Explanation of famous ORM DB MySQL",
+//          "duration": 183,
+//          "lang": "English",
+//          "genre": "Educational",
+//          "releasedate": "1995-05-31T00:00:00"
+//        }
+
 @RestController
 @RequestMapping("movie")
 public class moviecontroller {
