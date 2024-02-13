@@ -16,8 +16,8 @@ public class SeatscapeApplication {
 //		System.out.println(ts);
 		SpringApplication.run(SeatscapeApplication.class, args);
 	}
-	@Bean
-	public CommandLineRunner commandLineRunner(String [] args){
-		return runner -> System.out.println("Hello");
-	}
+//	@Bean
+//	public CommandLineRunner commandLineRunner(String [] args){
+//		return runner -> System.out.println("Hello");
+//	}
 }
