@@ -13,7 +13,7 @@ public class fooditem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String description; // Changed from "desc" to "description"
+    private String description;
     private Integer price;
     private String itemType;
 

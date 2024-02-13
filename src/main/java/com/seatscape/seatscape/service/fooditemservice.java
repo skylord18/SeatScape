@@ -51,4 +51,9 @@ public class fooditemservice {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    public int getpriceforitem(int val) {
+        int prc = fooditemDAO.getPricebyitemid(val);
+        return prc;
+    }
 }

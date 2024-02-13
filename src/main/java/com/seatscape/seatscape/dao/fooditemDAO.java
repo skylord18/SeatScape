@@ -12,4 +12,6 @@ import java.util.List;
 public interface fooditemDAO extends JpaRepository<fooditem, Integer> {
     @Query(value = "SELECT * from fooditems f where f.itemtype = :itemtype", nativeQuery = true)
     List<fooditem> findByitemtype(String itemtype);
+    @Query(value = "SELECT price FROM fooditems f WHERE f.id = :id", nativeQuery = true)
+    int getPricebyitemid(int id);
 }
