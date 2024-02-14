@@ -1,5 +1,8 @@
 package com.seatscape.seatscape.model;
 
+import org.hibernate.validator.constraints.CreditCardNumber;
+
 public class seat {
-    private Integer id;
+    @CreditCardNumber
+    private Integer cardNo;
 }

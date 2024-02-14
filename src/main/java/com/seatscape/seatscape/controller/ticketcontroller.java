@@ -1,7 +1,6 @@
 package com.seatscape.seatscape.controller;
 
 import com.seatscape.seatscape.exceptions.*;
-
 import com.seatscape.seatscape.model.ticket;
 import com.seatscape.seatscape.service.ticketservice;
 import org.springframework.beans.factory.annotation.Autowired;

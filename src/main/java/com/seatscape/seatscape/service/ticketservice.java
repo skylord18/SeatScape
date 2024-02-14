@@ -1,4 +1,5 @@
 package com.seatscape.seatscape.service;
+
 import com.seatscape.seatscape.dao.showDAO;
 import com.seatscape.seatscape.dao.ticketDAO;
 import com.seatscape.seatscape.exceptions.*;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

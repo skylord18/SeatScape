@@ -28,7 +28,7 @@ public class LoggerAspect {
         return returnObj;
     }
     @AfterThrowing(value = "execution(* com.seatscape.seatscape..*.*(..))", throwing = "ex")
-    public void logExceptions(ProceedingJoinPoint joinpoint, Exception exception){
-        log.error(joinpoint.getSignature().toString() + " Threw Exception Due to "+ exception.getMessage());
+    public void logExceptions(ProceedingJoinPoint joinpoint, Exception ex){
+        log.error(joinpoint.getSignature().toString() + " Threw Exception Due to "+ ex.getMessage());
     }
 }

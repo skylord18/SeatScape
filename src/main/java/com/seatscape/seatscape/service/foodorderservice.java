@@ -6,7 +6,6 @@ import com.seatscape.seatscape.exceptions.FoodOrderAlreadyExistsException;
 import com.seatscape.seatscape.exceptions.FoodOrderEmptyException;
 import com.seatscape.seatscape.exceptions.TicketDoesNotExistException;
 import com.seatscape.seatscape.model.foodorder;
-import com.seatscape.seatscape.model.foodorderwrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
